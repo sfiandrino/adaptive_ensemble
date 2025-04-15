@@ -1,1 +1,1 @@
-\bold{Adaptive Ensemble}
+\textbf{Adaptive Ensemble}
