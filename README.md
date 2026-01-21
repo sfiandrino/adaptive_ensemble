@@ -13,4 +13,19 @@ We consider the projections submitted to the U.S. Flu Scenario Modeling Hub duri
 The folder structure of the repository is as follows:
 - input_data: this folder contains all the data needed to reproduce the analysis.
 - scenario_modeling: this folder contains the US national level and US states level analysis. Code, figures, and output data are included.
-- short_term_forecasting: this folder contains code, figures, and output data as the result of the short-term forecasting retrospective analysis. 
+- short_term_forecasting: this folder contains code, figures, and output data as the result of the short-term forecasting retrospective analysis.
+
+**System requirements**
+
+- Operating system: Linux
+- Python version: 3.9.7
+- Python dependencies: see requirements.txt for full list
+  - matplotlib==3.10.8
+  - numpy==2.4.1
+  - pandas==2.3.3
+  - pillow==12.1.0
+  - requests==2.32.5
+  - rpy2==3.6.4  (requires R ≥ 3.0)
+  - seaborn==0.13.2
+- R version: ≥ 3.0 (required for rpy2)
+- Hardware: no non-standard hardware required
