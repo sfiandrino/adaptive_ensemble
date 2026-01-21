@@ -48,3 +48,21 @@ pip install -r requirements.txt
 
 Install R (optional, required only for rpy2):
 Make sure R ≥ 3.0 is installed.
+
+**Demo**
+Instructions to run on data
+- Ensure that all dependencies are installed (pip install -r requirements.txt).
+- Use the provided dataset in the data/ folder
+- Run the main analysis script:
+  - original_ensembles_generation.py: This code runs the original ensemble over the entire period. 
+  - adaptive_ensemble2_S2.py: This code runs the adaptive ensemble process over the entire period.
+  - adaptive_ensemble2_evaluation.ipynb: This code runs the evaluation analysis comparing the adaptive ensemble performance and the original ensemble performance.
+  - adaptive_ensemble2_performance_visualization.ipynb: This code runs the analysis to reproduce the figures of the results.
+  - scenario_posterior_visualization.ipynb: This code runs the analysis to reproduce the figures of the results.
+  - persistance_visualization.ipynb: This code runs the analysis to reproduce the figures of the results.
+  - adaptive_ensemble2_S1_forecasting.py: This code runs the short-term forecasting application. Equivalent code for evaluation and visualizations is provided for this specific application.
+- Expected output:
+  - Data files (Parquet or CSV)
+  - Figures reproducing the ones shown in the manuscript
+- Expected run time:
+  - Run time may vary depending on the task and data analyzed. Subnational-level analyses require more time due to the multi-state processing. 
