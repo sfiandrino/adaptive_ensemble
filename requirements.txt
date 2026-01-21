@@ -1,0 +1,7 @@
+matplotlib==3.10.8
+numpy==2.4.1
+pandas==2.3.3
+pillow==12.1.0
+requests==2.32.5
+rpy2==3.6.4
+seaborn==0.13.2
