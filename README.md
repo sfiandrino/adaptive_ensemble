@@ -66,4 +66,9 @@ Instructions to run on data
   - Data files (Parquet or CSV)
   - Figures reproducing the ones shown in the manuscript
 - Expected run time:
-  - Run time may vary depending on the task and data analyzed. Subnational-level analyses require more time due to the multi-state processing. 
+  - Run time may vary depending on the task and data analyzed. Subnational-level analyses require more time due to the multi-state processing.
+
+**Data licence and reuse**
+
+All source code that is specific to the overall project is available under an open-source MIT license. This license does NOT cover model code from the various teams or model scenario data, which are available under specified licenses.
+
