@@ -29,3 +29,22 @@ The folder structure of the repository is as follows:
   - seaborn==0.13.2
 - R version: ≥ 3.0 (required for rpy2)
 - Hardware: no non-standard hardware required
+
+**Installation Guide**
+
+Clone or download the repository:
+
+git clone https://github.com/sfiandrino/adaptive_ensemble.git
+cd adaptive_ensemble
+
+Create a Python virtual environment (optional but recommended):
+
+python3 -m venv venv
+source venv/bin/activate   # macOS / Linux
+venv\Scripts\activate    # Windows
+
+Install Python dependencies:
+pip install -r requirements.txt
+
+Install R (optional, required only for rpy2):
+Make sure R ≥ 3.0 is installed.
