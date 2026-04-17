@@ -7,7 +7,7 @@ library(yaml)
 library(purrr)
 library(testthat)
 
-ensemble_lop <- function(df, hor, toptraj, day_tosave, path_tosave, loss_function, is_original, scenario) {
+ensemble_lop <- function(df, hor, toptraj, day_tosave, path_tosave, loss_function, is_original, scenario, season) {
   
   df$horizon <- as.character(df$horizon)
   df$id_var <- paste(df$model_name, df$horizon)
@@ -19,8 +19,13 @@ ensemble_lop <- function(df, hor, toptraj, day_tosave, path_tosave, loss_functio
   horizons <- as.list(unique(df$horizon))
   df <- df %>% rename('id' = 'model_name')
   # give half weight to models from the same team
-  weights <- data.frame(id = c('CDDEP-FluCompModel', 'MOBS_NEU-GLEAM_FLU', 'NIH-FluD', 'NIH-Flu_TS', 'NotreDame-FRED',
+  if (season == "2024-2025") {
+    weights <- data.frame(id = c('MOBS_NEU-GLEAM_FLU', 'NIH-Flu_TS', 'NotreDame-FRED',
+                  'PSI-M2', 'USC-SIkJalpha', 'UT-ImmunoSEIRS', "UVA-EscapeFlu", 'UVA-FluXSim'), weight = c(1, 1, 1, 1, 1 ,1, 0.5, 0.5))
+  } else if (season == "2023-2024") {
+    weights <- data.frame(id = c('CDDEP-FluCompModel', 'MOBS_NEU-GLEAM_FLU', 'NIH-FluD', 'NIH-Flu_TS', 'NotreDame-FRED',
                   'PSI-M2', 'USC-SIkJalpha', 'UT-ImmunoSEIRS', 'UVA-FluXSim'), weight = c(1, 1, 0.5, 0.5, 1, 1 ,1, 1, 1))
+  }
   
   user_specified_weights <- function(df){
     weights <- check_weights_df(weights)
@@ -50,11 +55,11 @@ ensemble_lop <- function(df, hor, toptraj, day_tosave, path_tosave, loss_functio
   }
   #"/home/sfiandrino/PhD_Project/AdaptiveEnsemble_Forecasting_Scenario_tests/AdaptiveEnsemble2_S2_LOP/"
   if (is_original == TRUE) {
-    finalpath <- paste0(path_tosave, "Ensemble_", scenario, "_USnational.csv")
+    finalpath <- paste0(path_tosave, "Ensemble_", scenario, "_USnational", "_", season, ".csv")
   } else {
-    finalpath <- paste0(path_tosave, day_tosave, "_", toptraj, "_", loss_function, ".csv")
+    finalpath <- paste0(path_tosave, day_tosave, "_", toptraj, "_", loss_function, "_", season, ".csv")
   }
   
-  write.csv(finaltable, finalpath)
+  #write.csv(finaltable, finalpath)
   return(finaltable)
 }

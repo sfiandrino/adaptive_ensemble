@@ -57,7 +57,7 @@ def pandas_to_r_dataframe(df):
     """
     return pandas2ri.PandasDataFrame(df)
 
-def computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj):
+def computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, season):
     """
     This function computes the ensemble using the R script.
     input:
@@ -71,9 +71,9 @@ def computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save
     # load the R script
     r.r.source(path_R_script)
     dfQ_r_r = pandas2ri.py2rpy(dfQ_r)
-    if scenario is not "Ens2":
+    if scenario !=  "Ens2":
         scenario = scenario[0]
-    ens_r = r.r['ensemble_lop'](dfQ_r_r, hor, top_traj, day_to_save, path_to_save, loss_function, is_original, scenario)
+    ens_r = r.r['ensemble_lop'](dfQ_r_r, hor, top_traj, day_to_save, path_to_save, loss_function, is_original, scenario, season)
     return ens_r
 
 if __name__ == "__main__":
@@ -84,22 +84,30 @@ if __name__ == "__main__":
     loss_function = " "
     hor = ""
     top_traj = " "
+    season = "2024-2025"
     # flag to indicate we are generating the original ensemble
     is_original = True
     # Load the data
-    df_scenarios = pd.read_csv("../../../input_data/SMH_trajectories_FluRound1_2023_2024.csv", index_col = 0)
+    if season == '2023-2024':
+        df_scenarios = pd.read_parquet("../../../input_data/SMH_trajectories_FluRound1_2023_2024.parquet")
+    elif season == '2024-2025':
+        df_scenarios = pd.read_parquet("../../../input_data/SMH_trajectories_FluRound1_2024_2025.parquet")
+    # take only location US
+    df_scenarios = df_scenarios[df_scenarios['location'] == 'US']
+    df_scenarios.rename(columns={'model_id': 'model_name'}, inplace=True)
+    print(df_scenarios.columns)
     # Generate original ensemble for single scenarios
     for scenario in df_scenarios.scenario_id.unique():
         df_scenario = df_scenarios[df_scenarios.loc[:, 'scenario_id'] == scenario]
         create_ID_ModelTrajectory(df_scenario)
         dfQ = quantile_computation(df_scenario)
         dfQ_r = pandas_to_r_dataframe(dfQ)
-        ens_r = computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj)
+        ens_r = computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, season)
     # Generate original ensemble for the Ensemble2
     create_ID_ModelTrajectory(df_scenarios)
     dfQ = quantile_computation(df_scenarios)
     dfQ_r = pandas_to_r_dataframe(dfQ)
-    ens_r = computing_ensemble(dfQ_r, "Ens2", path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj)
+    ens_r = computing_ensemble(dfQ_r, "Ens2", path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, season)
 
 
 

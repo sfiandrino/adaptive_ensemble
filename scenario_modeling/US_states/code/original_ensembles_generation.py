@@ -9,7 +9,7 @@ from rpy2.robjects import pandas2ri
 import rpy2.robjects as robjects
 from rpy2 import robjects as r
 
-def create_ID_ModelTrajectory(df):
+def create_ID_ModelTrajectory(df, season):
     """
     This function creates a unique identifier for each trajectory in the dataframe.
     The identifier is a combination of the scenario_id, output_type_id and model_name.
@@ -18,8 +18,11 @@ def create_ID_ModelTrajectory(df):
     output:
         df = dataframe with a new column that identifies each trajectory
     """
-    df['output_type_id'] = df['output_type_id'].astype(str)
-    df['ids'] = df.apply(lambda x:'%s_%s_%s' % (x['scenario_id'], x['output_type_id'],x['model_name']),axis=1)
+    if season == "2024-2025":
+        df['ids'] = df['traj_id']
+    else:
+        df['output_type_id'] = df['output_type_id'].astype(str)
+        df['ids'] = df.apply(lambda x:'%s_%s_%s' % (x['scenario_id'], x['output_type_id'],x['model_name']),axis=1)
     return df
 
 def quantile_computation(df):
@@ -57,7 +60,7 @@ def pandas_to_r_dataframe(df):
     """
     return pandas2ri.PandasDataFrame(df)
 
-def computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, state):
+def computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, state, season):
     """
     This function computes the ensemble using the R script.
     input:
@@ -73,12 +76,13 @@ def computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save
     dfQ_r_r = pandas2ri.py2rpy(dfQ_r)
     if scenario is not "Ens2":
         scenario = scenario[0]
-    ens_r = r.r['ensemble_lop'](dfQ_r_r, hor, top_traj, day_to_save, path_to_save, loss_function, is_original, scenario, state)
+    ens_r = r.r['ensemble_lop'](dfQ_r_r, hor, top_traj, day_to_save, path_to_save, loss_function, is_original, scenario, state, season)
     return ens_r
 
 if __name__ == "__main__":
     path_R_script = "/home/sfiandrino/PhD_Project/adaptive_ensemble_methodological/scenario_modeling/US_states/code/ensemble_lop.r"
     path_to_save = "../output_data/original_ensembles/"
+    season = "2024-2025"
     # for the original ensemble the following data entries for the ensemble lop function are not used
     day_to_save = " "
     loss_function = " "
@@ -87,23 +91,29 @@ if __name__ == "__main__":
     # flag to indicate we are generating the original ensemble
     is_original = True
     # Load the data
-    df_scenarios = pd.read_csv("../../../input_data/SMH_trajectories_FluRound1_2023_2024_states.csv", index_col = 0)
+    if season == '2023-2024':
+        df_scenarios_states = pd.read_parquet("../../../input_data/SMH_trajectories_FluRound1_2023_2024_states.parquet")
+    elif season == '2024-2025':
+        df_scenarios_states = pd.read_parquet("../../../input_data/SMH_trajectories_FluRound1_2024_2025.parquet")
     # remove state = 'US' - national analysis has already been done
-    df_scenarios = df_scenarios[df_scenarios['location'] != 'US']
+    df_scenarios_states = df_scenarios_states[df_scenarios_states['location'] != 'US']
+    df_scenarios_states.rename(columns={'model_id': 'model_name'}, inplace=True)
+    states = df_scenarios_states['location'].unique().tolist()
+    states = sorted(states)  # Sort states alphabetically for consistency
     # Generate original ensemble for single scenarios
-    for state in df_scenarios.location.unique():
-        df_scenarios_state = df_scenarios[df_scenarios.loc[:, 'location'] == state]
-        for scenario in df_scenarios_state.scenario_id.unique():
-            df_scenario = df_scenarios_state[df_scenarios_state.loc[:, 'scenario_id'] == scenario]
-            create_ID_ModelTrajectory(df_scenario)
+    for state in states:
+        df_scenarios = df_scenarios_states[df_scenarios_states.loc[:, 'location'] == state]
+        for scenario in df_scenarios.scenario_id.unique():
+            df_scenario = df_scenarios[df_scenarios.loc[:, 'scenario_id'] == scenario]
+            create_ID_ModelTrajectory(df_scenario, season)
             dfQ = quantile_computation(df_scenario)
             dfQ_r = pandas_to_r_dataframe(dfQ)
-            ens_r = computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, state)
+            ens_r = computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, state, season)
         # Generate original ensemble for the Ensemble2
-        create_ID_ModelTrajectory(df_scenarios_state)
-        dfQ = quantile_computation(df_scenarios_state)
+        create_ID_ModelTrajectory(df_scenarios, season)
+        dfQ = quantile_computation(df_scenarios)
         dfQ_r = pandas_to_r_dataframe(dfQ)
-        ens_r = computing_ensemble(dfQ_r, "Ens2", path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, state)
+        ens_r = computing_ensemble(dfQ_r, "Ens2", path_R_script, day_to_save, path_to_save, loss_function, is_original, hor, top_traj, state, season)
 
 
 
