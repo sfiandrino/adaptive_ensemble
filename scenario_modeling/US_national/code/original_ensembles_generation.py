@@ -77,7 +77,7 @@ def computing_ensemble(dfQ_r, scenario, path_R_script, day_to_save, path_to_save
     return ens_r
 
 if __name__ == "__main__":
-    path_R_script = "/home/sfiandrino/PhD_Project/adaptive_ensemble_methodological/scenario_modeling/US_national/code/ensemble_lop.r"
+    path_R_script = "ensemble_lop.r"
     path_to_save = "../output_data/original_ensembles/"
     # for the original ensemble the following data entries for the ensemble lop function are not used
     day_to_save = " "
