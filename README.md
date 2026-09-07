@@ -51,6 +51,26 @@ Make sure R ≥ 3.0 is installed.
 
 **Demo**
 
+*Quick start: a minimal walk-through of the methodology*
+
+If you want to see how the adaptive ensemble works before running the full analysis, start from scenario_modeling/US_national/code/demo_adaptive_ensemble.py. It is a reduced version of adaptive_ensemble2_S2.py that runs on the small demo dataset input_data/demo_trajectories.parquet (3 models, 6 scenarios, 100 trajectories each, 20 weekly horizons, season 2023/2024) and prints the steps of the methodology one by one:
+
+- Step 0: the input pool of scenario trajectories.
+- Step 1: the weekly loop, i.e. score every trajectory against the surveillance data available so far, keep the best top-k% of each model, and combine the retained trajectories with a Linear Opinion Pool. The first week is shown in full detail (best and worst trajectories, trajectories kept per model, posterior over scenarios, resulting ensemble quantiles), the remaining weeks are summarised one line each.
+- Step 2: persistence of the selection across weeks (Jaccard similarity index).
+- Step 3: posterior distribution over scenarios.
+
+Run it from its own folder:
+
+cd scenario_modeling/US_national/code
+python demo_adaptive_ensemble.py
+
+Notes:
+- An internet connection is required, because the weekly (non-backfilled) surveillance snapshots are downloaded from the FluSight forecast hub.
+- All results are written to demo_-prefixed folders (../output_data/demo_adaptive_ensemble2/, ../output_data/demo_persistence_analysis/, ../output_data/demo_posterior_analysis/).
+
+**Instructions to run the full analysis**
+
 Instructions to run on data
 - Ensure that all dependencies are installed (pip install -r requirements.txt).
 - Use the provided dataset in the data/ folder
@@ -71,4 +91,3 @@ Instructions to run on data
 **Data licence and reuse**
 
 All source code that is specific to the overall project is available under an open-source MIT license. This license does NOT cover model code from the various teams or model scenario data, which are available under specified licenses.
-
