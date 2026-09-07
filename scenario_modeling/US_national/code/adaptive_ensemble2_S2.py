@@ -19,7 +19,7 @@ if __name__ == "__main__":
     path_posterior = "../output_data/posterior_analysis/"
     github_directory = "auxiliary-data/target-data-archive"
     season = "2024-2025"
-    path_R_script = "/home/sfiandrino/PhD_Project/adaptive_ensemble_methodological/scenario_modeling/US_national/code/ensemble_lop.r"
+    path_R_script = "ensemble_lop.r"
     df_scenarios = pd.read_parquet("../../../input_data/SMH_trajectories_FluRound1_2024_2025.parquet")
     # take only location US
     df_scenarios = df_scenarios[df_scenarios['location'] == 'US']
