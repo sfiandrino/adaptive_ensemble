@@ -18,7 +18,7 @@ if __name__ == "__main__":
     path_to_save = "../output_data/adaptive_ensemble2/"
     github_directory = "auxiliary-data/target-data-archive"
     season = "2023-2024"
-    path_R_script = "/home/sfiandrino/PhD_Project/adaptive_ensemble_methodological/scenario_modeling/US_national/code/ensemble_lop.r"
+    path_R_script = "ensemble_lop.r"
     df_scenarios = pd.read_parquet("../../../input_data/SMH_trajectories_FluRound1_2023_2024.parquet")
     # take only location US
     df_scenarios = df_scenarios[df_scenarios['location'] == 'US']
