@@ -6,7 +6,7 @@ The adaptive ensemble approach combines epidemic projections from the Flu Scenar
 
 **Datasets**
 
-We consider the projections submitted to the U.S. Flu Scenario Modeling Hub during Round 1 of 2023/2024 (https://fluscenariomodelinghub.org/index.html)
+We consider the projections submitted to the U.S. Flu Scenario Modeling Hub during Round 1 of 2023/2024 and 2024/2025 (https://fluscenariomodelinghub.org/index.html)
 
 **Structure of the repo**
 
