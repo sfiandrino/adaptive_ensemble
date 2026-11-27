@@ -17,17 +17,24 @@ The folder structure of the repository is as follows:
 
 **System requirements**
 
-- Operating system: Linux
-- Python version: 3.9.7
-- Python dependencies: see requirements.txt for full list
-  - matplotlib==3.10.8
-  - numpy==2.4.1
+- Operating system: Linux or macOS
+- Python version: 3.9
+- Python dependencies (see requirements.txt):
+  - numpy==1.26.4
   - pandas==2.3.3
-  - pillow==12.1.0
-  - requests==2.32.5
-  - rpy2==3.6.4  (requires R ≥ 3.0)
+  - matplotlib==3.7.0
   - seaborn==0.13.2
-- R version: ≥ 3.0 (required for rpy2)
+  - scikit-learn==1.5.1
+  - pyarrow==21.0.0
+  - requests==2.32.3
+  - rpy2==3.5.16  (requires R)
+  - PyYAML==6.0.1
+  - pillow==10.2.0
+- R version: 4.3.2 (required for rpy2, used to compute the LOP ensembles in `ensemble_lop.r`)
+- R dependencies:
+  - hubEnsembles 0.1.8 and hubUtils 1.2.0.9000 (from GitHub: hubverse-org)
+  - CombineDistributions 0.2.1
+  - dplyr 1.1.4, purrr 1.1.0, jsonlite 2.0.0, yaml 2.3.10
 - Hardware: no non-standard hardware required
 
 **Installation Guide**
